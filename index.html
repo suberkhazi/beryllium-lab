@@ -1,0 +1,763 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Beryllium Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      :root {
+        --accent: #2563eb;
+        --accent2: #7c3aed;
+        --green: #059669;
+        --amber: #d97706;
+        --bg: #f8fafc;
+        --surface: #ffffff;
+        --border: #e2e8f0;
+        --text: #0f172a;
+        --muted: #64748b;
+        --subtle: #f1f5f9;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background: var(--bg);
+        font-family: "Plus Jakarta Sans", sans-serif;
+        color: var(--text);
+        line-height: 1.6;
+      }
+
+      .mono {
+        font-family: "JetBrains Mono", monospace;
+      }
+
+      /* ── Dot pattern bg ── */
+      .dot-bg {
+        background-color: var(--bg);
+        background-image: radial-gradient(circle, #cbd5e1 1px, transparent 1px);
+        background-size: 28px 28px;
+      }
+
+      /* ── Gradient headline ── */
+      .grad-text {
+        background: linear-gradient(135deg, var(--accent), var(--accent2));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      /* ── Nav bar ── */
+      .navbar {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(16px);
+        border-bottom: 1px solid var(--border);
+        position: sticky;
+        top: 0;
+        z-index: 50;
+      }
+
+      /* ── Hero ── */
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #eff6ff;
+        color: var(--accent);
+        border: 1px solid #bfdbfe;
+        border-radius: 999px;
+        font-size: 12px;
+        font-family: "JetBrains Mono", monospace;
+        padding: 4px 14px;
+        font-weight: 500;
+        letter-spacing: 0.01em;
+      }
+
+      /* ── Stack pills in hero ── */
+      .stack-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        background: white;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 5px 12px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #374151;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+      }
+
+      /* ── Cards ── */
+      .project-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        transition:
+          transform 0.25s cubic-bezier(0.23, 1, 0.32, 1),
+          box-shadow 0.25s cubic-bezier(0.23, 1, 0.32, 1),
+          border-color 0.25s;
+        animation: slideUp 0.5s cubic-bezier(0.23, 1, 0.32, 1) both;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+      }
+
+      .project-card:hover {
+        transform: translateY(-5px);
+        box-shadow:
+          0 20px 50px rgba(0, 0, 0, 0.1),
+          0 0 0 1px rgba(37, 99, 235, 0.15);
+        border-color: #bfdbfe;
+      }
+
+      .card-accent-bar {
+        height: 4px;
+        background: linear-gradient(90deg, var(--accent), var(--accent2));
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+
+      .project-card:hover .card-accent-bar {
+        opacity: 1;
+      }
+
+      /* ── Tags ── */
+      .tag {
+        font-size: 11px;
+        font-family: "JetBrains Mono", monospace;
+        font-weight: 500;
+        padding: 3px 10px;
+        border-radius: 6px;
+        white-space: nowrap;
+      }
+
+      .tag-blue {
+        background: #eff6ff;
+        color: #1d4ed8;
+        border: 1px solid #bfdbfe;
+      }
+
+      .tag-purple {
+        background: #f5f3ff;
+        color: #6d28d9;
+        border: 1px solid #ddd6fe;
+      }
+
+      .tag-green {
+        background: #ecfdf5;
+        color: #065f46;
+        border: 1px solid #a7f3d0;
+      }
+
+      .tag-orange {
+        background: #fffbeb;
+        color: #92400e;
+        border: 1px solid #fde68a;
+      }
+
+      .tag-pink {
+        background: #fdf2f8;
+        color: #9d174d;
+        border: 1px solid #f9a8d4;
+      }
+
+      /* ── Status badge ── */
+      .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 600;
+        padding: 3px 10px;
+        font-family: "JetBrains Mono", monospace;
+      }
+
+      .status-active {
+        background: #dcfce7;
+        color: #166534;
+      }
+
+      .status-wip {
+        background: #fef9c3;
+        color: #854d0e;
+      }
+
+      .status-archived {
+        background: #f1f5f9;
+        color: #64748b;
+      }
+
+      .status-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+
+      .dot-active {
+        background: #16a34a;
+        animation: pulse 2s infinite;
+      }
+
+      .dot-wip {
+        background: #ca8a04;
+      }
+
+      .dot-archived {
+        background: #94a3b8;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+          box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.4);
+        }
+
+        50% {
+          opacity: 0.8;
+          box-shadow: 0 0 0 4px rgba(22, 163, 74, 0);
+        }
+      }
+
+      /* ── Link button ── */
+      .link-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--muted);
+        border: 1px solid var(--border);
+        padding: 5px 12px;
+        border-radius: 8px;
+        text-decoration: none;
+        background: var(--subtle);
+        transition: all 0.2s;
+        font-family: "Plus Jakarta Sans", sans-serif;
+      }
+
+      .link-btn:hover {
+        color: var(--accent);
+        border-color: #bfdbfe;
+        background: #eff6ff;
+      }
+
+      /* ── Search & filter ── */
+      .search-wrap {
+        position: relative;
+      }
+
+      .search-input {
+        background: white;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        color: var(--text);
+        font-family: "Plus Jakarta Sans", sans-serif;
+        font-size: 14px;
+        padding: 9px 16px 9px 40px;
+        outline: none;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+        width: 240px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      }
+
+      .search-input:focus {
+        border-color: #93c5fd;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      }
+
+      .search-input::placeholder {
+        color: #94a3b8;
+      }
+
+      .filter-btn {
+        font-family: "Plus Jakarta Sans", sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        padding: 7px 16px;
+        border: 1px solid var(--border);
+        background: white;
+        color: var(--muted);
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.2s;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      }
+
+      .filter-btn:hover {
+        color: var(--accent);
+        border-color: #93c5fd;
+        background: #eff6ff;
+      }
+
+      .filter-btn.active {
+        color: white;
+        background: var(--accent);
+        border-color: var(--accent);
+        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+      }
+
+      /* ── Number badge ── */
+      .num-badge {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        font-weight: 700;
+        color: #94a3b8;
+        background: var(--subtle);
+        border-radius: 6px;
+        padding: 2px 8px;
+      }
+
+      /* ── Divider ── */
+      .divider {
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          var(--accent),
+          var(--accent2),
+          transparent
+        );
+        opacity: 0.2;
+      }
+
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 640px) {
+        .search-input {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+
+  <body class="dot-bg min-h-screen">
+    <!-- ── NAVBAR ───────────────────────────────────── -->
+    <nav class="navbar">
+      <div
+        class="max-w-6xl mx-auto px-4 sm:px-8 h-14 flex items-center justify-between"
+      >
+        <div class="flex items-center gap-2">
+          <div
+            class="w-7 h-7 rounded-lg bg-blue-600 flex items-center justify-center"
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="white"
+              stroke-width="2.5"
+            >
+              <polyline points="16 18 22 12 16 6" />
+              <polyline points="8 6 2 12 8 18" />
+            </svg>
+          </div>
+          <span class="mono font-bold text-sm text-gray-800"
+            >Suber's <span class="text-blue-600">Beryllium Lab</span></span
+          >
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="mono text-xs text-gray-400 hidden sm:inline"
+            >PocketMarketOS-F1</span
+          >
+          <div class="flex items-center gap-1.5">
+            <span class="status-dot dot-active"></span>
+            <span class="text-xs font-semibold text-green-700">online</span>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ── HERO ─────────────────────────────────────── -->
+    <header class="max-w-6xl mx-auto px-4 sm:px-8 pt-14 pb-12">
+      <div
+        class="flex flex-col lg:flex-row lg:items-center justify-between gap-10"
+      >
+        <div class="max-w-xl">
+          <div class="hero-badge mb-5">
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+            >
+              <polyline points="16 18 22 12 16 6" />
+              <polyline points="8 6 2 12 8 18" />
+            </svg>
+            self-hosted · open source
+          </div>
+          <h1
+            class="text-5xl sm:text-6xl font-extrabold leading-none tracking-tight text-gray-900 mb-4"
+          >
+            Things I've<br /><span class="grad-text">Built</span>
+          </h1>
+          <p class="text-base text-gray-500 leading-relaxed">
+            A living collection of projects, tools & experiments — all running
+            on my self-hosted on my broken-screen
+            <span class="grad-text">Poco F1 phone</span> with PocketMarketOS
+            (Linux) stack via Tailscale.
+          </p>
+        </div>
+
+        <!-- Stack cards -->
+        <div
+          class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 gap-2"
+        >
+          <div class="stack-pill"><span>🐍</span> Python</div>
+          <div class="stack-pill"><span>⚡</span> JavaScript</div>
+          <div class="stack-pill"><span>📘</span> TypeScript</div>
+          <div class="stack-pill"><span>🗃️</span> SQLite</div>
+          <div class="stack-pill"><span>🗄️</span> MariaDB</div>
+          <div class="stack-pill"><span>🐧</span> Linux</div>
+          <div class="stack-pill"><span>📱</span> React Native</div>
+          <div class="stack-pill"><span>⚛️</span> React</div>
+          <div class="stack-pill"><span>🚂</span> ExpressJs</div>
+          <div class="stack-pill"><span>🎨</span> TailwindCSS</div>
+          <div class="stack-pill"><span>🧠</span> AI/ML</div>
+          <div class="stack-pill"><span>🔁</span> CI/CD Pipeline</div>
+        </div>
+      </div>
+
+      <!-- Stats row -->
+      <div class="flex gap-6 mt-10 pt-8 border-t border-gray-100" id="statsRow">
+        <div>
+          <div class="text-2xl font-extrabold text-gray-900" id="statTotal">
+            —
+          </div>
+          <div class="text-xs text-gray-400 font-medium mt-0.5">
+            Total projects
+          </div>
+        </div>
+        <div class="w-px bg-gray-100"></div>
+        <div>
+          <div class="text-2xl font-extrabold text-green-600" id="statActive">
+            —
+          </div>
+          <div class="text-xs text-gray-400 font-medium mt-0.5">Active</div>
+        </div>
+        <div class="w-px bg-gray-100"></div>
+        <div>
+          <div class="text-2xl font-extrabold text-amber-500" id="statWip">
+            —
+          </div>
+          <div class="text-xs text-gray-400 font-medium mt-0.5">
+            In progress
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ── CONTROLS ─────────────────────────────────── -->
+    <div class="max-w-6xl mx-auto px-4 sm:px-8 mb-6">
+      <div class="flex flex-wrap items-center gap-3">
+        <div class="search-wrap">
+          <svg
+            class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <input
+            class="search-input"
+            id="searchInput"
+            type="text"
+            placeholder="Search projects…"
+            oninput="filterProjects()"
+          />
+        </div>
+        <button class="filter-btn active" onclick="setFilter(this, 'all')">
+          All
+        </button>
+        <button class="filter-btn" onclick="setFilter(this, 'active')">
+          🟢 Active
+        </button>
+        <button class="filter-btn" onclick="setFilter(this, 'wip')">
+          🟡 In Progress
+        </button>
+        <button class="filter-btn" onclick="setFilter(this, 'archived')">
+          ⚪ Archived
+        </button>
+        <span id="countBadge" class="ml-auto mono text-xs text-gray-400"></span>
+      </div>
+    </div>
+
+    <!-- ── GRID ─────────────────────────────────────── -->
+    <main class="max-w-6xl mx-auto px-4 sm:px-8 pb-24">
+      <div
+        id="projectGrid"
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
+      ></div>
+      <div
+        id="emptyState"
+        class="hidden text-center py-24 text-gray-400 text-sm"
+      >
+        <div class="text-4xl mb-4">🔍</div>
+        <p class="font-semibold">No projects match your search</p>
+        <p class="text-xs mt-1 text-gray-300">
+          Try different keywords or clear the filter
+        </p>
+      </div>
+    </main>
+
+    <!-- ── FOOTER ───────────────────────────────────── -->
+    <footer class="border-t border-gray-100 bg-white">
+      <div
+        class="max-w-6xl mx-auto px-4 sm:px-8 py-6 flex flex-col sm:flex-row justify-between items-center gap-3"
+      >
+        <span class="mono text-xs text-gray-400"
+          >Built on PocketMarketOS · self-hosted stack</span
+        >
+        <span class="mono text-xs text-gray-400" id="lastUpdated"></span>
+      </div>
+    </footer>
+
+    <!-- ═══════════════════════════════════════════════════════
+                        PROJECT DATA
+       ═══════════════════════════════════════════════════════
+       tagStyle options: "blue" | "purple" | "green" | "orange" | "pink"
+       status options:   "active" | "wip" | "archived"
+  -->
+    <script>
+      const PROJECTS = [
+        {
+          number: "01",
+          title: "Beryllium Core Dashboard",
+          desc: "Mobile server project that repurposes a retired Poco F1 into a secure 24/7 Linux node with a live dashboard. Running postmarketOS directly on Snapdragon 845 hardware, it uses a FastAPI backend to read /proc and /sys in real time and stream CPU, thermal, memory, battery, storage metrics. A Tailwind + Chart.js frontend visualizes the data in a responsive glassmorphism UI, while Tailscale + Funnel provides encrypted public HTTPS access without exposing direct device control.",
+          tags: [
+            "Linux",
+            "Python",
+            "FastAPI",
+            "Tailwind+Chart.Js",
+            "Tailscale",
+          ],
+          tagStyles: ["blue", "purple", "purple", "green", "orange"],
+          status: "active",
+          demo: "https://suberkhazi.github.io/Poco_Dashboard/",
+          repo: "https://github.com/suberkhazi/Poco_Dashboard",
+          date: "Feb 2025",
+        },
+        {
+          number: "02",
+          title: "All In One",
+          desc: "Full-stack life-tracking platform I built as a monorepo with a web dashboard, React Native mobile app, and Node.js API—running on a repurposed Poco F1 phone as a real Linux server. It combines tasks, expenses (with OCR receipt scanning), hours tracking(German work hours), and personal analytics with real-time sync between devices. The system uses secure auth (bcrypt + JWT), MariaDB on-device storage, and Tailscale Funnel to safely expose the home-hosted backend to the public internet.",
+          tags: [
+            "React",
+            "React-Native",
+            "Express.js",
+            "MariaDB",
+            "TailwindCSS",
+            "OCR",
+          ],
+          tagStyles: ["orange", "orange", "purple", "green", "blue", "pink"],
+          status: "active",
+          demo: "https://all-in-one-sage.vercel.app/",
+          repo: "https://github.com/suberkhazi/AllInOne",
+          date: "Mar 2025",
+        },
+        {
+          number: "03",
+          title: "ReelVault",
+          desc: "Full-stack private AI media cloud I engineered on a headless Linux-flashed Poco F1 (repurposed hardware) instead of cloud VMs. It ships as a Vercel web app + Android APK and highlights include reel-style memory viewing, public + username-based private sharing, AI auto-tagging, OCR text extraction/search, and all basic functionality. The system uses Node/Express + SQLite on-device, with AI workloads offloaded to multi-core worker modules for better performance.",
+          tags: [
+            "React",
+            "React-Native",
+            "Express.js",
+            "Typecript",
+            "SQLite",
+            "AI/Ml",
+            "TensorFlow",
+            "Tesseract",
+          ],
+          tagStyles: [
+            "orange",
+            "orange",
+            "purple",
+            "purple",
+            "green",
+            "pink",
+            "pink",
+            "pink",
+          ],
+          status: "active",
+          demo: "https://reel-vault-pi.vercel.app/",
+          repo: "https://github.com/suberkhazi/ReelVault",
+          date: "Apr 2025",
+        },
+      ];
+
+      // ─── Tag color map ─────────────────────────────────────
+      const TAG_CLS = {
+        blue: "tag-blue",
+        purple: "tag-purple",
+        green: "tag-green",
+        orange: "tag-orange",
+        pink: "tag-pink",
+      };
+
+      const STATUS_META = {
+        active: { label: "Active", badge: "status-active", dot: "dot-active" },
+        wip: { label: "In Progress", badge: "status-wip", dot: "dot-wip" },
+        archived: {
+          label: "Archived",
+          badge: "status-archived",
+          dot: "dot-archived",
+        },
+      };
+
+      // ─── Build a single card ────────────────────────────────
+      function buildCard(p, idx) {
+        const sm = STATUS_META[p.status] || STATUS_META.archived;
+        const tags = (p.tags || [])
+          .map((t, i) => {
+            const cls = TAG_CLS[p.tagStyles?.[i]] || "tag-blue";
+            return `<span class="tag ${cls}">${t}</span>`;
+          })
+          .join("");
+
+        const demoBtn = p.demo
+          ? `<a href="${p.demo}" target="_blank" class="link-btn">
+             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+               <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+               <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+             </svg>Live demo</a>`
+          : "";
+
+        const repoBtn = p.repo
+          ? `<a href="${p.repo}" target="_blank" class="link-btn">
+             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+               <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+             </svg>GitHub</a>`
+          : "";
+
+        return `
+        <article class="project-card" style="animation-delay:${idx * 70}ms"
+                 data-status="${p.status}"
+                 data-search="${p.title} ${p.desc} ${(p.tags || []).join(" ")}".toLowerCase()>
+          <div class="card-accent-bar"></div>
+          <div class="p-6 flex flex-col flex-1">
+
+            <!-- Top row -->
+            <div class="flex items-center justify-between mb-4">
+              <span class="num-badge">${p.number}</span>
+              <span class="status-badge ${sm.badge}">
+                <span class="status-dot ${sm.dot}"></span>
+                ${sm.label}
+              </span>
+            </div>
+
+            <!-- Title -->
+            <h2 class="text-lg font-bold text-gray-900 mb-2 leading-snug">${p.title}</h2>
+
+            <!-- Desc -->
+            <p class="text-sm text-gray-500 leading-relaxed flex-1 mb-4">${p.desc}</p>
+
+            <!-- Tags -->
+            <div class="flex flex-wrap gap-1.5 mb-5">${tags}</div>
+
+            <!-- Footer -->
+            <div class="flex items-center justify-between pt-4 border-t border-gray-50">
+              <div class="flex gap-2">${demoBtn}${repoBtn}</div>
+              <span class="mono text-xs text-gray-300">${p.date}</span>
+            </div>
+
+          </div>
+        </article>`;
+      }
+
+      // ─── State ─────────────────────────────────────────────
+      let activeFilter = "all";
+
+      function filterProjects() {
+        const q = (document.getElementById("searchInput").value || "")
+          .toLowerCase()
+          .trim();
+        const filtered = PROJECTS.filter((p) => {
+          const matchStatus =
+            activeFilter === "all" || p.status === activeFilter;
+          const haystack =
+            `${p.title} ${p.desc} ${(p.tags || []).join(" ")}`.toLowerCase();
+          return matchStatus && (!q || haystack.includes(q));
+        });
+
+        const grid = document.getElementById("projectGrid");
+        const empty = document.getElementById("emptyState");
+        const badge = document.getElementById("countBadge");
+
+        if (filtered.length === 0) {
+          grid.innerHTML = "";
+          empty.classList.remove("hidden");
+          badge.textContent = "";
+          return;
+        }
+        empty.classList.add("hidden");
+        grid.innerHTML = filtered.map((p, i) => buildCard(p, i)).join("");
+        badge.textContent = `${filtered.length} of ${PROJECTS.length} projects`;
+      }
+
+      function setFilter(btn, val) {
+        activeFilter = val;
+        document
+          .querySelectorAll(".filter-btn")
+          .forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        filterProjects();
+      }
+
+      // ─── Stats ─────────────────────────────────────────────
+      function updateStats() {
+        document.getElementById("statTotal").textContent = PROJECTS.length;
+        document.getElementById("statActive").textContent = PROJECTS.filter(
+          (p) => p.status === "active",
+        ).length;
+        document.getElementById("statWip").textContent = PROJECTS.filter(
+          (p) => p.status === "wip",
+        ).length;
+      }
+
+      // ─── Init ──────────────────────────────────────────────
+      filterProjects();
+      updateStats();
+      document.getElementById("lastUpdated").textContent =
+        "Updated " +
+        new Date().toLocaleDateString("en-GB", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        });
+    </script>
+  </body>
+</html>
